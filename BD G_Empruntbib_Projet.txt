@@ -1,0 +1,48 @@
+
+
+
+CREATE TABLE catalogue(
+codeg number(10) constraint pk_catalogue primary key,
+titre varchar2(200) NOT NULL,
+NomAut  varchar2(80) NOT NULL,
+prenomAut  varchar2(80) NOT NULL,
+anEd number (4),
+editeur varchar(50) NOT NULL,
+Prix Number(8,3));
+
+
+create table exemplaire(
+codexp VARCHAR(10),
+codeg number(10) NOT NULL,
+etat char(8) NOT NULL,
+disp char(3) NOT NULL,
+constraint pk_exemplaire primary key(codexp),
+constraint fk_exemplaire_catalogue foreign key(codeg) references catalogue(codeg),
+constraint ck_exemplaire_etat check (etat IN ('bon','moyen','mediocre')),
+ constraint ck_exemplaire_disp check (disp IN ('oui','non')));
+
+
+create table Adherent(
+noAdh number(6) constraint pk_membres primary key,
+nom varchar2(80) NOT NULL,
+prenom varchar2(80) NOT NULL,
+adresse varchar2(200) NOT NULL,
+ncin NUMBER (8) UNIQUE,
+tel NUMBER(10),
+dateAdh DATE NOT NULL,
+email VARchar(80) NOT NULL);
+
+
+CREATE TABLE Emprunt(
+codexp varchar(10) NOT NULL,
+dateEmp DATE NOT NULL,
+noAdh number(6) NOT NULL,
+dateRprevue DATE NOT NULL,
+datereffective DATE,
+constraint fk_emprunts_codexp foreign key (codexp)references exemplaire(codexp),
+constraint fk_emprunts_adh foreign key (noAdh) references adherent (noadh), 
+constraint pk_emprunts primary key (codexp, dateemp));
+
+**********************************. Extrait des données à insérer **************
+
+INSERT INTO Catalogue VALUES (100, 'Base de donnees','ADIBA','Michel',1995,'atlas',70);INSERT INTO Catalogue VALUES (200, 'Base des objets','COLLAND','Rollet',1990,'atlas', 58);INSERT INTO Catalogue VALUES (300, 'OO DMBS','ADIBA','Michel',1998,'eyrolls', 45);INSERT INTO Catalogue VALUES (400, 'ORACLE SQL','LINDEN','Brian',2000, 'eyrolls',60);INSERT INTO Catalogue VALUES (500, 'SQL*Plus reference','LINDEN','Brian',2001,'eyrolls', 63);INSERT INTO Catalogue VALUES (600, 'Web Database','BUYENS','Jim',2000,'eyrolls', 73);INSERT INTO Exemplaire VALUES ('BDD_01', 'cat1', 'bon', 'oui');INSERT INTO Exemplaire VALUES ('BDD_02', 'cat1', 'bon', 'oui');INSERT INTO Exemplaire VALUES ('BD0_01', 'cat2', 'bon', 'oui');INSERT INTO Exemplaire VALUES ('OOMS_01', 'cat3', 'mediocre', 'non');INSERT INTO Exemplaire VALUES ('OOMS_02', 'cat3', 'bon', 'oui');INSERT INTO Exemplaire VALUES ('ORA.SQL_01', 'cat4', 'bon', 'oui');INSERT INTO Exemplaire VALUES ('SQLP_01', 'cat5', 'bon', 'oui');INSERT INTO Exemplaire VALUES ('WDB_00', 'cat6', 'moyen', 'oui');
